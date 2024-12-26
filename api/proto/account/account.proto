@@ -8,28 +8,47 @@ package account;
 option go_package = "/proto/account;account"; // Ganti dengan path sesuai proyek Anda
 
 service Account {
+  rpc Create(AccountModel) returns (CreateResponse);
   rpc Read(ReadRequest) returns (ReadResponse);
-}
-
-message AccountModelInfo {
-  // @gotags: bson:"first_name"
-  string first_name = 1;
-  // @gotags: bson:"last_name"
-  string last_name = 2;
+  rpc Update(UpdateRequest) returns (UpdateResponse);
 }
 
 message AccountModel {
   // @gotags: bson:"_id"
   string id = 1;
   // @gotags: bson:"info"
-  AccountModelInfo info = 2;
+  string info = 2;
+  // @gotags: bson:"credential"
+  string credential = 3;
 }
+
+message CreateResponse {
+  bool status = 1;
+  int32 code = 2;
+  string msg = 3;
+  string id = 4;
+  string error = 5;
+}
+
 
 message ReadRequest {
   int32 limit = 1;
 }
 
 message ReadResponse {
+  bool status = 1;
+  int32 code = 2;
+  string msg = 3;
+  repeated AccountModel data = 4;
+  string error = 5;
+}
+
+message UpdateRequest {
+  AccountModel query = 1;
+  AccountModel search = 2;
+}
+
+message UpdateResponse {
   bool status = 1;
   int32 code = 2;
   string msg = 3;

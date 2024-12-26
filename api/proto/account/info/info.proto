@@ -2,23 +2,22 @@ syntax = "proto3";
 
 
 // Menentukan paket untuk file .proto ini
-package credential;
+package info;
 
 // Menentukan Go package untuk hasil generate kode
-option go_package = "/proto/account/credential;credential"; // Ganti dengan path sesuai proyek Anda
+option go_package = "/proto/account/info;info"; // Ganti dengan path sesuai proyek Anda
 
-service Credential {
-
+service Info {
   rpc Read(ReadRequest) returns (ReadResponse);
 }
 
-message CredentialModel {
+message InfoModel {
   // @gotags: bson:"_id"
   string id = 1;
-  // @gotags: bson:"username"
-  string username = 2;
-  // @gotags: bson:"password"
-  string password = 3;
+  // @gotags: bson:"first_name"
+  string first_name = 2;
+  // @gotags: bson:"last_name"
+  string last_name = 3;
 }
 
 message ReadRequest {
@@ -29,6 +28,6 @@ message ReadResponse {
   bool status = 1;
   int32 code = 2;
   string msg = 3;
-  repeated CredentialModel data = 4;
+  repeated InfoModel data = 4;
   string error = 5;
 }
