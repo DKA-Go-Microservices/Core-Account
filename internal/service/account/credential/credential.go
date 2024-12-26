@@ -25,7 +25,8 @@ func (s *Server) Read(ctx context.Context, req *credential.ReadRequest) (*creden
 	if p, ok := peer.FromContext(ctx); ok {
 		log.Printf("Request: %s -> %s", p.Addr, p.LocalAddr)
 	}
-	// Connect to database
+
+	// Connect to database client
 	db, err := database.Client(ctx).GetDatabase("dka_parking")
 	if err != nil {
 		log.Println("Database connection error:", err)
