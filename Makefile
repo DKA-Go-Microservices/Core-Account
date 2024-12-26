@@ -11,13 +11,8 @@ build: clean proto
 	@echo "TASK: Building ..."
 	@cd cmd && go build -o $(RELEASE_DIR)/$(EXECUTABLE_NAME)
 
-install:
-	@clear
-	@echo "TASK: Installing Go Mod"
-	@go mod tidy
-
 # Clean built binaries
-clean: install
+clean:
 	@echo "TASK: Cleaning up..."
 	@rm -rf $(RELEASE_DIR)/*
 	@rm -rf generated/*

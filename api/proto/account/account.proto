@@ -25,7 +25,6 @@ message AccountModel {
   AccountModelInfo info = 2;
 }
 
-
 message ReadRequest {
   int32 limit = 1;
 }
