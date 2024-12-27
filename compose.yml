@@ -1,0 +1,69 @@
+name: dka-service-core-account
+
+services:
+
+  app:
+    image: yovanggaanandhika/go
+    container_name: dka-service-core-account-app
+    hostname: dka-service-core-account-app
+    working_dir: /home/app
+    deploy:
+      resources:
+        reservations:
+          memory: 700M
+          cpus: '0.7'
+        limits:
+          memory: 800M
+          cpus: '2.0'
+    environment:
+      DKA_DB_HOST: dka-service-core-account-mongo
+      DKA_DB_NAME: dka-core-account
+      DKA_DB_USERNAME: developer
+      DKA_DB_PASSWORD: Cyberhack2010
+    volumes:
+      - type: bind
+        source: release
+        target: /home/app
+    ports:
+      - target: 8080
+        published: 8090
+        protocol: tcp
+        host_ip: 0.0.0.0
+    command: ./main
+    networks:
+      - default
+
+  mongo:
+    image: mongo:latest
+    container_name: dka-service-core-account-mongo
+    hostname: dka-service-core-account-mongo
+    deploy:
+      resources:
+        reservations:
+          memory: 200M
+          cpus: '0.7'
+        limits:
+          memory: 500M
+          cpus: '1.0'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: developer
+      MONGO_INITDB_ROOT_PASSWORD: Cyberhack2010
+    volumes:
+      - type: volume
+        source: mongo-data
+        target: /data/db
+    ports:
+      - target: 27017
+        published: 27017
+        host_ip: 0.0.0.0
+        protocol: tcp
+    networks:
+      - default
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

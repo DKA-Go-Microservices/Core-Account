@@ -18,6 +18,11 @@ type Server struct {
 	credential.UnimplementedCredentialServer
 }
 
+var (
+	db   = "dka_account"
+	coll = "account_credential"
+)
+
 // Read Implementation
 func (s *Server) Read(ctx context.Context, req *credential.ReadRequest) (*credential.ReadResponse, error) {
 	startTime := time.Now() // Catat waktu mulai
@@ -27,7 +32,7 @@ func (s *Server) Read(ctx context.Context, req *credential.ReadRequest) (*creden
 	}
 
 	// Connect to database client
-	db, err := database.Client(ctx).GetDatabase("dka_parking")
+	db, err := database.Client(ctx).GetDatabase(db)
 	if err != nil {
 		log.Println("Database connection error:", err)
 		return &credential.ReadResponse{
@@ -39,7 +44,7 @@ func (s *Server) Read(ctx context.Context, req *credential.ReadRequest) (*creden
 	}
 
 	// Find documents in the collection
-	cursor, err := db.Collection("sys_corporation").Find(ctx, bson.D{})
+	cursor, err := db.Collection(coll).Find(ctx, bson.D{})
 	if err != nil {
 		log.Println("Find query error:", err)
 		return &credential.ReadResponse{

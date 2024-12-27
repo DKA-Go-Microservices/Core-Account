@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Connect to the gRPC server on port 5051
-	conn, err := grpc.Dial("127.0.0.1:5052", grpc.WithInsecure())
+	conn, err := grpc.Dial("127.0.0.1:8090", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("could not connect: %v", err)
 	}
@@ -24,7 +24,17 @@ func main() {
 	// Create a new ExampleService client
 	client := account.NewAccountClient(conn)
 
-	res, err := client.Read(context.Background(), &account.ReadRequest{})
+	/*res, err := client.Read(context.Background(), &info.ReadRequest{})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
+	// Print the response message
+	fmt.Println(res)*/
+
+	res, err := client.Create(context.Background(), &account.AccountModel{
+		Credential: "",
+	})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}

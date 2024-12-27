@@ -35,7 +35,7 @@ preview: build
 
 docker: build
 	@echo "TASK: Running Docker Compose"
-	@docker compose up -d --force-recreate
+	@docker compose up -d app --force-recreate
 
 prod:
 	@echo "TASK: Run Production Executable"

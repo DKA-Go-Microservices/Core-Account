@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/DKA-Go-Microservices/Core-Account/generated/proto/account"
 	database "github.com/DKA-Go-Microservices/Core-Account/internal/database/MongoDB"
@@ -19,6 +20,11 @@ type Server struct {
 	account.UnimplementedAccountServer
 }
 
+var (
+	db   = "dka_account"
+	coll = "account"
+)
+
 // Create implementation
 func (s *Server) Create(ctx context.Context, req *account.AccountModel) (*account.CreateResponse, error) {
 	// Log asal permintaan untuk debugging
@@ -26,8 +32,31 @@ func (s *Server) Create(ctx context.Context, req *account.AccountModel) (*accoun
 		log.Printf("Request: %s -> %s", p.Addr, p.LocalAddr)
 	}
 
+	/**
+	 * @Validation for Request Credential Data Is Required
+	 */
+	if req.Credential == "" {
+		return &account.CreateResponse{
+			Status: false,
+			Code:   http.StatusBadRequest,
+			Msg:    "Credential Is Required",
+			Error:  errors.New("credential Is Required").Error(),
+		}, nil
+	}
+	/**
+	 * @Validation for Request Info Data Is Required
+	 */
+	if req.Info == "" {
+		return &account.CreateResponse{
+			Status: false,
+			Code:   http.StatusBadRequest,
+			Msg:    "Info Is Required",
+			Error:  errors.New("info Is Required").Error(),
+		}, nil
+	}
+
 	// Koneksi ke database
-	db, err := database.Client(ctx).GetDatabase("dka_parking")
+	db, err := database.Client(ctx).GetDatabase(db)
 	if err != nil {
 		log.Println("Database connection error:", err)
 		return &account.CreateResponse{
@@ -39,7 +68,7 @@ func (s *Server) Create(ctx context.Context, req *account.AccountModel) (*accoun
 	}
 
 	// Insert data ke koleksi
-	res, err := db.Collection("account").InsertOne(ctx, req)
+	res, err := db.Collection(coll).InsertOne(ctx, req)
 	if err != nil {
 		log.Println("Insert operation error:", err)
 		return &account.CreateResponse{
@@ -66,7 +95,7 @@ func (s *Server) Read(ctx context.Context, req *account.ReadRequest) (*account.R
 		log.Printf("Request: %s -> %s", p.Addr, p.LocalAddr)
 	}
 	// Connect to database
-	db, err := database.Client(ctx).GetDatabase("dka_parking")
+	db, err := database.Client(ctx).GetDatabase(db)
 	if err != nil {
 		log.Println("Database connection error:", err)
 		return &account.ReadResponse{
@@ -78,7 +107,7 @@ func (s *Server) Read(ctx context.Context, req *account.ReadRequest) (*account.R
 	}
 
 	// Find documents in the collection
-	cursor, err := db.Collection("sys_corporation").Find(ctx, bson.D{})
+	cursor, err := db.Collection(coll).Find(ctx, bson.D{})
 	if err != nil {
 		log.Println("Find query error:", err)
 		return &account.ReadResponse{

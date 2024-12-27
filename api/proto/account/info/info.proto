@@ -8,16 +8,25 @@ package info;
 option go_package = "/proto/account/info;info"; // Ganti dengan path sesuai proyek Anda
 
 service Info {
+  rpc Create(InfoModel) returns (CreateResponse);
   rpc Read(ReadRequest) returns (ReadResponse);
 }
 
 message InfoModel {
-  // @gotags: bson:"_id"
+  // @gotags: bson:"_id,omitempty"
   string id = 1;
   // @gotags: bson:"first_name"
   string first_name = 2;
   // @gotags: bson:"last_name"
   string last_name = 3;
+}
+
+message CreateResponse {
+  bool status = 1;
+  int32 code = 2;
+  string msg = 3;
+  string id = 4;
+  string error = 5;
 }
 
 message ReadRequest {

@@ -14,11 +14,11 @@ service Account {
 }
 
 message AccountModel {
-  // @gotags: bson:"_id"
+  // @gotags: bson:"_id,omitempty"
   string id = 1;
-  // @gotags: bson:"info"
+  // @gotags: bson:"info" -> Validasi wajib dilakukan di aplikasi
   string info = 2;
-  // @gotags: bson:"credential"
+  // @gotags: bson:"credential" -> Validasi wajib dilakukan di aplikasi
   string credential = 3;
 }
 
